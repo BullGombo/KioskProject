@@ -49,10 +49,10 @@ public class Main {
             int menuSelectNum = sc.nextInt();
 
             // 0 입력 시 종료
-            if (menuSelectNum == 0) {
-                System.out.println("키오스크를 종료합니다.");
-                loopFlag = false;
-            } 
+//            if (menuSelectNum == 0) {
+//                System.out.println("키오스크를 종료합니다.");
+//                loopFlag = false;
+//            }
 
             // 입력된 번호에 맞는 기능 실행
             switch (menuSelectNum) {
@@ -74,6 +74,11 @@ public class Main {
                     
                 case 9:
                     System.out.println("주문 결재창으로 이동합니다.");
+                    break;
+
+                case 0:
+                    System.out.println("키오스크를 종료합니다.");
+                    loopFlag = false;
                     break;
 
                 default:
