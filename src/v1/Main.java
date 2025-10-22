@@ -1,6 +1,6 @@
 package v1;
 
-public class App {
+public class Main {
 
     // 프로그램 시작점
     static void main(String[] args) {
