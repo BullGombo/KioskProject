@@ -1,15 +1,12 @@
 package v1;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
-// 메인의 흐름
-// 시작점으로써의 역할
+// 프로그램 시작점으로써의 역할
 public class Main {
-    // 햄버거 메뉴 출력 및 선택
-    // - scanner를 사용하여 여러 햄버거 메뉴를 입력받고 출력
-    // - 제시된 메뉴 중 입력받은 숫자에 따라 다른 로직을 실행하는 코드를 작성
-    // - 반복문을 이용하여 특정 번호가 입력되면 프로그램을 종료
-
     // 실행 흐름 :
     // 메뉴 텍스트 출력 -> 입력 대기 -> 번호 입력 -> 입력 번호에 맞는 기능 실행 -> 메뉴 텍스트 출력...(반복)
 
@@ -17,6 +14,8 @@ public class Main {
 
     // 프로그램 시작점
     public static void main(String[] args) {
+
+        List<MenuItem> menuList = MenuItem.getMenuList();
 
         boolean loopFlag = true;
 
@@ -35,9 +34,15 @@ public class Main {
             // 메뉴 텍스트 출력
             System.out.println("========================================");
             System.out.println("================[ MENU ]================");
-            System.out.println("1. 치즈버거 | 7000원 | 구성 : 재료1 + 재료2 + 재료3 + ...");
-            System.out.println("2. 불고기버거 | 6000원 | 구성 : 재료1 + 재료2 + 재료3 + ...");
-            System.out.println("3. 치킨버거 | 7000원 | 구성 : 재료1 + 재료2 + 재료3 + ...");
+//            System.out.println("1. " + menuList.get(0).getMenuName() + " | " +
+//                    menuList.get(0).getPrice() + "원 | 구성 : " +
+//                    menuList.get(0).getDescription());
+            // 기존 처리를 향상시킨 반복문 - 메뉴 리스트 자동 출력
+            for (int i = 0; i < menuList.size(); i++) {
+                MenuItem item = menuList.get(i);
+                System.out.println((i + 1) + ". " + item.getMenuName() +
+                        " | " + item.getPrice() + "원 | 구성 : " + item.getDescription());
+            }
             System.out.println("8. 장바구니");
             System.out.println("9. 주문");
             System.out.println("0. 종료");
@@ -56,15 +61,15 @@ public class Main {
             // 입력된 번호에 맞는 기능 실행
             switch (menuSelectNum) {
                 case 1:
-                    System.out.println("치즈버거가 장바구니에 등록되었습니다.");
-                    break;
+                    // 아무런 처리를 하지 않음으로써 case 3까지 스킵 후 걸쳐짐
 
                 case 2:
-                    System.out.println("불고기버거가 장바구니에 등록되었습니다.");
-                    break;
+                    // 아무런 처리를 하지 않음으로써 case 3까지 스킵 후 걸쳐짐
 
                 case 3:
-                    System.out.println("치킨버거가 장바구니에 등록되었습니다.");
+                    // (올바른 인덱스 접근을 위해 -1 처리 할 것 잊지말기)
+                    MenuItem selected = MenuItem.getMenu(menuSelectNum - 1);
+                    System.out.println(selected.getMenuName() + "가 장바구니에 등록되었습니다.");
                     break;
 
                 case 8:
