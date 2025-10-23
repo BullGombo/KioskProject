@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-// 프로그램 시작점으로써의 역할
+// 프로그램 시작 지점 역할
 public class Main {
     // 실행 흐름 :
 // 메뉴 텍스트 출력(MenuItem접근) -> 입력 대기 -> 번호 입력 -> 입력 번호에 맞는 기능 실행

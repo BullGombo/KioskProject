@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// 세부 메뉴 속성 가지는 클래스
 // 개별 음식 항목을 관리하는 클래스
 public class MenuItem {
 
