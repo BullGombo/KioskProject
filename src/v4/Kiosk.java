@@ -21,10 +21,9 @@ public class Kiosk {
 
 
     // ---------------------------------- 기능 ----------------------------------
-    // main 함수에서 관리하던 입력과 반복문 로직은 이제 start 함수를 만들어 관리
+    // 메인 메뉴 표시, 카테고리 선택 입력 대기
     public void start() {
 
-//        List<MenuItem> menuList = MenuItem.getMenuList();
 
         boolean loopFlag = true;
 
@@ -32,6 +31,8 @@ public class Kiosk {
 
         while (loopFlag) {
             System.out.println("\n[ MAIN MENU ]");
+            // List<String> categories = new ArrayList<>(menuMap.keySet());
+            // List<String> categories = List.copyOf(menuMap.keySet());
             List<String> categories = menu.getCategories();
 
             for (int i = 0; i < categories.size(); i++) {
@@ -49,7 +50,7 @@ public class Kiosk {
             }
 
             if (mainChoice < 1 || mainChoice > categories.size()) {
-                System.out.println("⚠️ 올바른 번호를 입력해주세요.");
+                System.out.println("올바른 번호를 입력해주세요.");
                 continue;
             }
 
@@ -61,7 +62,7 @@ public class Kiosk {
 
     }   // start() 끝
 
-    // 카테고리 내 세부 메뉴 표시
+    // 카테고리 내 세부 메뉴 표시, 메뉴 선택 입력 대기
     private void showSubMenu(String category) {
         List<MenuItem> items = menu.getMenuItems(category);
 
@@ -78,7 +79,7 @@ public class Kiosk {
             }
 
             if (choice < 1 || choice > items.size()) {
-                System.out.println("⚠️ 올바른 번호를 입력해주세요.");
+                System.out.println("올바른 번호를 입력해주세요.");
                 continue;
             }
 
@@ -94,7 +95,7 @@ public class Kiosk {
         try {
             return Integer.parseInt(sc.nextLine());
         } catch (NumberFormatException e) {
-            System.out.println("⚠️ 숫자를 입력해주세요.");
+            System.out.println("숫자를 입력해주세요.");
             return -1;
         }
     }
