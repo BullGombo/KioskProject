@@ -1,4 +1,4 @@
-package v5;
+package v6;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -54,19 +54,4 @@ public class Menu {
         return List.copyOf(menuMap.get(category));
     }
 
-//    // 특정 카테고리의 메뉴 출력 -> Kiosk로 이동
-//    public void showMenuItems(String category) {
-//        List<MenuItem> items = menuMap.get(category);
-//        if (items == null) {
-//            System.out.println("해당 카테고리가 존재하지 않습니다.");
-//            return;
-//        }
-//
-//        for (int i = 0; i < items.size(); i++) {
-//            MenuItem item = items.get(i);
-//            System.out.println((i + 1) + ". " + item.getMenuName() +
-//                    " | W " + (item.getPrice() / 1000.0) +
-//                    " | " + item.getDescription());
-//        }
-//    }
 }
