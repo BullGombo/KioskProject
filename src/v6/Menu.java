@@ -15,6 +15,7 @@ public class Menu {
         initMenu();
     }
 
+    // 메뉴판 초기화
     private void initMenu() {
 
         // Burgers 카테고리

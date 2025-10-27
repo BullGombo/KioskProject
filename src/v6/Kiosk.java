@@ -23,7 +23,7 @@ public class Kiosk {
     public void start() {
         boolean loopFlag = true;
 
-        System.out.println("Kiosk V4 start");
+        System.out.println("Kiosk V6 start");
 
         while (loopFlag) {
             // 메인 화면 출력, categories 리스트 반환
