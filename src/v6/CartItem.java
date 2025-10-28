@@ -21,5 +21,10 @@ public class CartItem {
     public void setcPrice(int cPrice) { this.cPrice = cPrice; }
 
     //
+    // toString() 오버라이드 (출력 편의용)
+    @Override
+    public String toString() {
+        return "수량: " + quantity + " | 총액: W " + (cPrice / 1000.0);
+    }
 
 }
