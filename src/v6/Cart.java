@@ -58,7 +58,7 @@ public class Cart {
         System.out.println("-------------------------------------");
         System.out.println("총 금액: W " + (total / 1000.0));
         System.out.println("-------------------------------------");
-        System.out.println("'d' 입력 시 삭제 / '0' 입력 시 뒤로가기");
+        System.out.println("'d' 입력 시 삭제 실행 / 그 외 입력 시 : 넘기기");
 
         System.out.print(">> ");
         String input = sc.nextLine().trim();

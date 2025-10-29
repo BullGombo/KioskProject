@@ -197,7 +197,7 @@ public class Kiosk {
         }
     } // showMenuItems(String category) 끝
     
-    // 결제 메서드
+    // v6 - 결제 메서드
     private  void paymentActivate() {
         System.out.println("\n[ 결제 확인 ]");
         // 장바구니 출력
@@ -211,7 +211,7 @@ public class Kiosk {
             System.out.print("결제를 진행하시겠습니까? (y = 결제 진행, 그외 입력 = 취소): ");
             String confirm = sc.nextLine().trim().toLowerCase();
             if (confirm.equals("y")) {  // 'y'
-                System.out.println("💳 결제가 완료되었습니다. 감사합니다!");
+                System.out.println("결제가 완료되었습니다. 감사합니다!");
                 cart.clearCart(); // 장바구니 초기화
             } else {
                 System.out.println("결제가 취소되었습니다.");
