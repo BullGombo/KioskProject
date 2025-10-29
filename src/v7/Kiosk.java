@@ -23,7 +23,7 @@ public class Kiosk {
     public void start() {
         boolean loopFlag = true;
 
-        System.out.println("Kiosk V6 start");
+        System.out.println("Kiosk V7 start");
 
         while (loopFlag) {
             // 메인 화면 출력, categories 리스트 반환
@@ -197,8 +197,8 @@ public class Kiosk {
         }
     } // showMenuItems(String category) 끝
     
-    // v6 - 결제 메서드
-    private  void paymentActivate() {
+    // v7 - 결제 메서드 + 할인 기능
+    private void paymentActivate() {
         System.out.println("\n[ 결제 확인 ]");
         // 장바구니 출력
         cart.showCart();
@@ -207,10 +207,14 @@ public class Kiosk {
         if (cart.isEmpty()) {
             System.out.println("결제할 항목이 없습니다.");
             return;
-        } else {    // 결제 재차 확인
+        } else {    
+            discountActivate();
+            
+            // 결제 재차 확인
             System.out.print("결제를 진행하시겠습니까? (y = 결제 진행, 그외 입력 = 취소): ");
             String confirm = sc.nextLine().trim().toLowerCase();
             if (confirm.equals("y")) {  // 'y'
+                // discountActivate(); 위치 ???????????????????????
                 System.out.println("결제가 완료되었습니다. 감사합니다!");
                 cart.clearCart(); // 장바구니 초기화
             } else {
@@ -219,17 +223,36 @@ public class Kiosk {
         }
     } // paymentActivate() 끝
 
-//    private void showCart() {
-//    }
+    // v7 - 할인 적용 기능
+    private void discountActivate() {
 
-    // 숫자 입력 처리
-//    private int getIntInput() {
-//        try {
-//            return Integer.parseInt(sc.nextLine());
-//        } catch (NumberFormatException e) {
-//            System.out.println("숫자를 입력해주세요.");
-//            return -1;
-//        }
-//    }
+        // 사용자 유형 선택
+        System.out.println("\n[ 사용자 유형 선택 ]");
+        // 향상된 for문 - 속성필드values()를 순회하며 출력
+        for (Discount type : Discount.values()) {
+            System.out.printf("- %s (할인율: %.0f%%)%n", type.name(), type.getRate() * 100);
+        }
+
+        // 수정 사항 - 사용자가 유형 선택을 번호로 입력하도록
+        System.out.print(">> 유형 입력 (예: STUDENT): ");
+        String userType = sc.nextLine().trim().toUpperCase();
+
+        // 사용자 입력 처리
+        Discount selectedDiscount = null;
+        try {
+            selectedDiscount = Discount.valueOf(userType);
+        } catch (IllegalArgumentException e) {
+            System.out.println("오입력, 혹은 일치하는 할인 유형이 없어 일반 결제로 진행됩니다.");
+            selectedDiscount = Discount.ORDINARY;
+        }
+
+        double total = cart.getTotalPrice();
+        double discountRate = selectedDiscount.getRate();
+        double finalTotal = total * (1 - discountRate);
+
+        System.out.printf("총 금액: W %.1f → 할인 적용 후: W %.1f%n",
+                (total / 1000.0), (finalTotal / 1000.0));
+
+    }
 
 }

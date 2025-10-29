@@ -1,38 +1,63 @@
 package v7;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 // 장바구니 컬렉션과 관련 기능을 관리하는 클래스
-public class Cart {
+// v7 - 제네릭 처리
+public class Cart<T extends CartItem> {
 
     // ---------------------------------- 속성 ----------------------------------
     // private Map<String, List<CartItem>> cart = new LinkedHashMap<>();
     // key: 메뉴이름(String) | value: CartItem
-    private Map<String, CartItem> cart = new LinkedHashMap<>();
+    // private Map<String, CartItem> cart = new LinkedHashMap<>();
+    
+    // v7 - 제네릭 컬렉션
+    private final Map<String, T> cart = new LinkedHashMap<>();
     private final Scanner sc = new Scanner(System.in);
 
     // ---------------------------------- 생성자 ----------------------------------
     // 생략 가능
 
     // ---------------------------------- 기능 ----------------------------------
-    // 장바구니에 음식 추가
+    // v7 - 총액 합산 메서드 (스트림+람다 처리)
+    public int getTotalPrice() {
+        return cart.values().stream()
+                // CartItem::getcPrice 는 람다식 item -> item.getcPrice() 와 동일
+                .mapToInt(CartItem::getcPrice)
+                .sum();
+    }
+
+    // v7 - 장바구니에 음식 추가 (제네릭 사용 + 스트림&람다 처리)
     public void addCartItem(String itemName, int price, int quantity) {
-        CartItem existing = cart.get(itemName);
+        // CartItem existing = cart.get(itemName);
+        T existing = cart.get(itemName); // v7 - 제네릭 처리
         // 기존 수량과 가격에 추가하는 로직
-        if (existing != null) {
+        if (existing != null) { // 이미 존재하던 품목 처리
             existing.setQuantity(existing.getQuantity() + quantity);
             existing.setcPrice(existing.getcPrice() + price * quantity);
-        } else {
-            // 존재하지 않던 품목을 새롭게 추가하는 로직
-            cart.put(itemName, new CartItem(quantity, price * quantity));
+        } else { // 존재하지 않던 품목을 새롭게 추가하는 로직
+            // cart.put(itemName, new CartItem(quantity, price * quantity));
+            cart.put(itemName, (T) new CartItem(quantity, price * quantity));
         }
         System.out.println("=> [" + itemName + "] " + quantity +
                 "개가 장바구니에 추가되었습니다.");
+
+        // 굳이! 스트림&람다를 쓴다면 아래와 같은 형식이 된다...
+//        cart.entrySet().stream()
+//                .filter(e -> e.getKey().equals(itemName))
+//                .findFirst()
+//                .ifPresentOrElse(
+//                        e -> {
+//                            CartItem item = (CartItem) e.getValue();
+//                            item.setQuantity(item.getQuantity() + quantity);
+//                            item.setcPrice(item.getcPrice() + price * quantity);
+//                        },
+//                        () -> cart.put(itemName, (T) new CartItem(quantity, price * quantity))
+//                );
+
     }
 
-    // 장바구니 표시
+    // v7 - 장바구니 출력 (스트림 + 람다)
     public void showCart() {
         // 장바구니가 비어있는 경우
         if (cart.isEmpty()) {
@@ -41,18 +66,25 @@ public class Cart {
         }
 
         System.out.println("\n[ 장바구니 목록 ]");
-        // 번호 매김을 위한 초기화
-        int index = 1;
-        int total = 0;
+        // 번호 매김을 위한 변수 초기화
+        // int index = 1;
+        final int[] index = {1};
+        // int total = 0;
+        // v7 - 신규 총액 합산 메서드 호출
+        int total = getTotalPrice();
 
         // 향상된 for문 - 장바구니 컬렉션 출력
-        for (Map.Entry<String, CartItem> entry : cart.entrySet()) {
-            String itemName = entry.getKey();
-            CartItem item = entry.getValue();
-            System.out.println(index + ". " + itemName + " | " + item);
-            total += item.getcPrice();
-            index++;
-        }
+//        for (Map.Entry<String, CartItem> entry : cart.entrySet()) {
+//            String itemName = entry.getKey();
+//            CartItem item = entry.getValue();
+//            System.out.println(index + ". " + itemName + " | " + item);
+//            total += item.getcPrice();
+//            index++;
+//        }
+        // v7 - 장바구니 컬렉션 출력 forEach + 람다
+        cart.forEach((itemName, item) -> {
+            System.out.println(index[0]++ + ". " + itemName + " | " + item);
+        });
 
         System.out.println("-------------------------------------");
         System.out.println("총 금액: W " + (total / 1000.0));
@@ -66,9 +98,9 @@ public class Cart {
         if (input.equalsIgnoreCase("d")) {
             deleteCartItem();
         }
-    }
+    } // showCart() 끝
 
-    // 장바구니 항목 삭제
+    // v7 - 장바구니 항목 삭제
     public void deleteCartItem() {
         if (cart.isEmpty()) {
             System.out.println("삭제할 항목이 없습니다.");
@@ -76,10 +108,15 @@ public class Cart {
         }
 
         // 기존 장바구니 컬렉션 출력
-        int index = 1;
-        for (String itemName : cart.keySet()) {
-            System.out.println(index + ". " + itemName);
-            index++;
+//        int index = 1;
+//        for (String itemName : cart.keySet()) {
+//            System.out.println(index + ". " + itemName);
+//            index++;
+//        }
+        // v7 - 컬렉션 순회 반복 - 장바구니 출력
+        List<String> itemList = new ArrayList<>(cart.keySet());
+        for (int i = 0; i < itemList.size(); i++) {
+            System.out.println((i + 1) + ". " + itemList.get(i));
         }
 
         // 삭제 입력받기
@@ -103,8 +140,11 @@ public class Cart {
             }
 
             // 입력된 번호의 음식 특정
-            String targetItem = (String) cart.keySet().toArray()[itemIndex - 1];
-            CartItem item = cart.get(targetItem);
+            // String targetItem = (String) cart.keySet().toArray()[itemIndex - 1];
+            // CartItem item = cart.get(targetItem);
+            // v7 - 컬렉션으로 접근, 변수 제네릭 처리
+            String targetItem = itemList.get(itemIndex - 1);
+            T item = cart.get(targetItem);
 
             System.out.print("[" + targetItem + "] " + delQty +
                     "개 삭제하시겠습니까? (y = 삭제, 그외 입력 = 취소): ");
@@ -124,8 +164,8 @@ public class Cart {
             } else {
                 System.out.println("삭제를 취소했습니다.");
             }
-            // 수량 입력에 숫자가 입력되지 않았을 경우
-        } catch (NumberFormatException e) {
+
+        } catch (NumberFormatException e) { // 수량 입력에 숫자가 입력되지 않았을 경우
             System.out.println("숫자를 올바르게 입력해주세요.");
         }
     } // deleteCartItem() 끝

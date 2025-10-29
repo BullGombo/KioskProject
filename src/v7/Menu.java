@@ -7,14 +7,17 @@ import java.util.Map;
 
 // MenuItem 클래스를 관리하는 클래스
 public class Menu {
+    // ---------------------------------- 속성 ----------------------------------
     // 순서가 유지되는 LinkedHashMap을 private final로 선언
     // key=String(카테고리) - value=List<MenuItem>(메뉴리스트)
     private final Map<String, List<MenuItem>> menuMap = new LinkedHashMap<>();
 
+    // ---------------------------------- 생성자 ----------------------------------
     public Menu() {
         initMenu();
     }
 
+    // ---------------------------------- 기능 ----------------------------------
     // 메뉴판 초기화
     private void initMenu() {
 
@@ -53,6 +56,17 @@ public class Menu {
     public List<MenuItem> getMenuItems(String category) {
         // return menuMap.getOrDefault(category, new ArrayList<>());
         return List.copyOf(menuMap.get(category));
+    }
+
+    // v7 - Stream으로 메뉴 리스트 반환 및 출력 (스트림&람다 형식)
+    public void showAllMenus() {
+        System.out.println("\n[ 전체 메뉴 목록 ]");
+        menuMap.forEach((category, items) -> {
+            System.out.println("\n== " + category.toUpperCase() + " ==");
+            items.stream()
+                    .map(item -> item.getMenuName() + " | " + (item.getPrice() / 1000.0) + " | " + item.getDescription())
+                    .forEach(System.out::println);
+        });
     }
 
 }
