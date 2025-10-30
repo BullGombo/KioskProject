@@ -170,6 +170,78 @@ classDiagram
 
 ---
 
+# 🧮 Discount Enum & 할인 로직 플로우차트
+
+> `discountActivate()` 메서드의 **데이터 흐름**과 **시스템 흐름**을 정리한 문서입니다.  
+> 사용자가 할인 유형을 선택하면, 해당 할인율을 Enum에서 찾아  
+> 장바구니 총 금액에 적용한 뒤 최종 결제 금액을 계산합니다.
+
+---
+
+## 🧠 1️⃣ 데이터 흐름 (Data Flow Diagram)
+
+```mermaid
+flowchart TD
+
+A[사용자 입력] -->|번호 선택| B[입력값 (int selectnum)]
+B --> C[Discount Enum 전체 (values())]
+C -->|selectnum 일치| D[선택된 Discount 객체]
+D --> E[getRate() 호출 → 할인율 추출]
+E --> F[cart.getTotalPrice()]
+F --> G[총 금액(total)]
+G --> H[할인 적용 (finalTotal = total * (1 - rate))]
+H --> I[결과 출력]
+```
+
+
+| 데이터                    | 설명             |
+| :--------------------- | :------------- |
+| `selectnum`            | 사용자가 입력한 번호    |
+| `Discount.values()`    | Enum의 모든 상수 목록 |
+| `Discount.getRate()`   | 해당 유형의 할인율 반환  |
+| `cart.getTotalPrice()` | 장바구니 총합 금액 반환  |
+| `finalTotal`           | 할인 적용 후 최종 금액  |
+
+
+
+## ⚙️ 2️⃣ 시스템 흐름 (System Flowchart)
+
+
+```mermaid
+flowchart TD
+
+START([시작]) 
+--> A["[ 사용자 유형 선택 ] 출력"]
+--> B["Enum.values() 반복 → 번호, 이름, 할인율 출력"]
+--> C["사용자 입력 (번호)"]
+--> D{"입력 번호가 Enum에 존재?"}
+
+D -->|예| E["해당 번호의 Discount Enum 선택"]
+E --> F["할인율(rate) 추출"]
+F --> G["cart.getTotalPrice() 호출"]
+G --> H["총 금액 * (1 - rate) 계산"]
+H --> I["결과 금액 출력"]
+I --> END([종료])
+
+D -->|아니오| X["ORDINARY (일반 결제)로 처리"]
+X --> F
+```
+
+## 📘 4️⃣ 주요 데이터 정의
+
+| 필드                     | 설명                      |
+| ---------------------- | ----------------------- |
+| `Discount Enum`        | 할인 유형 및 할인율을 정의하는 상수 집합 |
+| `values()`             | Enum의 모든 상수를 배열로 반환     |
+| `getRate()`            | Enum 상수별 할인율 반환         |
+| `selectnum`            | 번호 입력용 식별자              |
+| `ORDINARY`             | 일치하지 않는 입력일 때의 기본 타입    |
+| `cart.getTotalPrice()` | 장바구니 총합 금액 계산 메서드       |
+| `finalTotal`           | 할인율이 적용된 최종 결제 금액       |
+
+
+---
+
 
 ## 🚀 실행 방법
 
