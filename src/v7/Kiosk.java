@@ -1,5 +1,6 @@
 package v7;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -82,7 +83,7 @@ public class Kiosk {
     private List<String> showMainMenu() {
         List<String> categories = menu.getCategories();
 
-        System.out.println("\n[ MAIN MENU ]");
+        System.out.println("\n==============[ MAIN MENU ]==============");
         for (int i = 0; i < categories.size(); i++) {
             System.out.println((i + 1) + ". " + categories.get(i));
         }
@@ -90,6 +91,7 @@ public class Kiosk {
         System.out.println("c. 장바구니");
         System.out.println("p. 결제");
         System.out.println("0. 종료");
+        System.out.println("=========================================");
 
         // 자원 반환 필수!
         return categories;
@@ -100,12 +102,14 @@ public class Kiosk {
         List<MenuItem> items = menu.getMenuItems(category);
 
         while (true) {
-            System.out.println("\n[ " + category.toUpperCase() + " MENU ]");
+            System.out.println("\n==============[ " + category.toUpperCase() +
+                    " MENU ]==============");
             showMenuItems(category);
             // v6 - 장바구니 + 결제
             System.out.println("c. 장바구니");
             System.out.println("p. 결제하기");
             System.out.println("0. 뒤로가기");
+            System.out.println("===========================================");
             System.out.print(">> 메뉴 번호 입력: ");
             //int choice = getIntInput();
             // v6 - 모든 입력이 가능하게 처리
@@ -230,20 +234,30 @@ public class Kiosk {
         System.out.println("\n[ 사용자 유형 선택 ]");
         // 향상된 for문 - 속성필드values()를 순회하며 출력
         for (Discount type : Discount.values()) {
-            System.out.printf("- %s (할인율: %.0f%%)%n", type.name(), type.getRate() * 100);
+            System.out.printf("%d. %s (할인율: %.0f%%)%n",
+                    type.getSelectnum(), type.getDiscountName(), type.getRate() * 100);
         }
 
         // 수정 사항 - 사용자가 유형 선택을 번호로 입력하도록
-        System.out.print(">> 유형 입력 (예: STUDENT): ");
-        String userType = sc.nextLine().trim().toUpperCase();
+        System.out.print(">> 할인 유형 번호 입력 : ");
+        String input = sc.nextLine().trim();
 
-        // 사용자 입력 처리
-        Discount selectedDiscount = null;
+        // 기본값을 일반인으로 초기화
+        Discount selectedDiscount = Discount.ORDINARY;
+
+        //
         try {
-            selectedDiscount = Discount.valueOf(userType);
-        } catch (IllegalArgumentException e) {
-            System.out.println("오입력, 혹은 일치하는 할인 유형이 없어 일반 결제로 진행됩니다.");
-            selectedDiscount = Discount.ORDINARY;
+            // 입력값 타입변환
+            int selectNum = Integer.parseInt(input);
+
+            // selectNum 일치하는 Enum 찾기
+            selectedDiscount = Arrays.stream(Discount.values())
+                    .filter(n -> n.getSelectnum() == selectNum)
+                    .findFirst()
+                    .orElse(Discount.ORDINARY);
+            
+        } catch (NumberFormatException e) {
+            System.out.println("오입력, 일반 결제로 진행됩니다.");
         }
 
         double total = cart.getTotalPrice();

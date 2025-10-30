@@ -75,7 +75,7 @@ public class Cart<T extends CartItem> {
             return;
         }
 
-        System.out.println("\n[ 장바구니 목록 ]");
+        System.out.println("\n==============[ 장바구니 목록 ]==============");
         // 번호 매김을 위한 변수 초기화
         // int index = 1;
         final int[] index = {1};
@@ -99,6 +99,7 @@ public class Cart<T extends CartItem> {
         System.out.println("-------------------------------------");
         System.out.println("총 금액: W " + (total / 1000.0));
         System.out.println("-------------------------------------");
+        System.out.println("==========================================");
         System.out.println("'d' 입력 시 삭제 실행 / 그 외 입력 시 : 넘기기");
 
         System.out.print(">> ");
