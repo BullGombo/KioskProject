@@ -80,6 +80,64 @@ src/
 <img width="605" height="730" alt="스크린샷 2025-10-30 110202" src="https://github.com/user-attachments/assets/5daf37bf-8965-4d7b-bf0b-1ec8712a6045" />
 
 
+```mermaid
+classDiagram
+    class Kiosk {
+        - Menu menu
+        - Cart cart
+        - Scanner sc
+        + void start()
+        + void showSubMenu(String category)
+        + void discountActivate()
+    }
+
+    class Menu {
+        - Map<String, List<MenuItem>> menuMap
+        + List<String> getCategories()
+        + List<MenuItem> getMenuItems(String category)
+    }
+
+    class MenuItem {
+        - String name
+        - String description
+        - double price
+        + String getName()
+        + double getPrice()
+    }
+
+    class Cart {
+        - Map<String, CartItem> cart
+        + void addCartItem(String itemName, int price, int quantity)
+        + void deleteCartItem()
+        + int getTotalPrice()
+    }
+
+    class CartItem {
+        - int quantity
+        - int cPrice
+        + void setQuantity(int quantity)
+        + void setcPrice(int cPrice)
+        + int getQuantity()
+        + int getcPrice()
+    }
+
+    class Discount {
+        <<enum>>
+        + NATIONALMERIT
+        + SOLDIER
+        + STUDENT
+        + CHILD
+        + ORDINARY
+    }
+
+    Kiosk --> Menu
+    Kiosk --> Cart
+    Menu --> MenuItem
+    Cart --> CartItem
+    Kiosk --> Discount
+```
+
+
 ### **집합 관계(1:多)**
 - Kiosk - Menu
 - Menu - MenuItem
@@ -90,6 +148,24 @@ src/
 - Kiosk - KioskView
 - Kiosk - Order
 - OrderItem - MenuItem
+
+
+
+---
+
+
+
+## 🧭 클래스별 역할 요약
+
+| 클래스명                | 역할                      | 주요 메서드                                                 | 관계                       |
+| ------------------- | ----------------------- | ------------------------------------------------------ | ------------------------ |
+| **Kiosk**           | 프로그램의 진입점, 전체 실행 제어     | `start()`, `showSubMenu()`, `discountActivate()`       | Menu, Cart, Discount와 협력 |
+| **Menu**            | 카테고리별 메뉴 구성 및 관리        | `getCategories()`, `getMenuItems()`                    | MenuItem을 포함             |
+| **MenuItem**        | 개별 메뉴(이름, 가격, 설명) 저장    | `getName()`, `getPrice()`                              | Menu에 의해 사용              |
+| **Cart**            | 장바구니 관리(추가/삭제/합계)       | `addCartItem()`, `deleteCartItem()`, `getTotalPrice()` | CartItem을 포함             |
+| **CartItem**        | 장바구니 내 개별 품목(수량, 가격) 관리 | `setQuantity()`, `setcPrice()`                         | Cart 내부 요소               |
+| **Discount (Enum)** | 사용자 유형별 할인율 관리          | `getRate()`, `getSelectNum()`                          | Kiosk에서 선택, 적용           |
+
 
 
 ---
